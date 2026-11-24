@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+*.log
+data/brave_youtube_profile/
+data/browser_profile/
+data/*profile*/
+data/watch_progress.json
+static/thumbnails/*_progress.jpg
+
+

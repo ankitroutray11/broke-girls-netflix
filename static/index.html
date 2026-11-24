@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PlayerSlayer's Sanctuary</title>
+  <link rel="icon" type="image/png" href="/static/assets/icon.png">
+  <link rel="shortcut icon" href="/static/assets/icon.ico">
+  <link rel="stylesheet" href="/static/styles.css?v=20261026_03">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Top Luxury Navigation Bar -->
+  <header class="navbar" id="navbar">
+    <div class="nav-left">
+      <div class="brand-logo" onclick="switchMainView('brokegirls')">
+        <img src="/static/assets/icon.png" class="brand-crest" alt="PlayerSlayer">
+        <span class="logo-red">PLAYERSLAYER'S</span>
+        <span class="logo-tag">SANCTUARY</span>
+      </div>
+    </div>
+
+    <div class="nav-right">
+      <!-- Subtle YouTube Icon replacing Search Bar -->
+      <button class="icon-btn yt-nav-btn" id="nav-yt-btn" onclick="openYouTubePortal('home')" title="Watch YouTube">
+        <i class="fa-brands fa-youtube"></i>
+      </button>
+
+      <button class="icon-btn" id="fs-btn" onclick="toggleAppFullscreen()" title="Fullscreen (F11)">
+        <i class="fa-solid fa-expand"></i>
+      </button>
+
+      <button class="icon-btn" onclick="refreshCatalog()" title="Refresh">
+        <i class="fa-solid fa-arrows-rotate"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- =========================================================================
+       VIEW 1: 2 BROKE GIRLS SANCTUARY (Local Cinema View)
+       ========================================================================= -->
+  <div id="brokegirls-container" class="main-view-container">
+    <!-- Hero Billboard Section -->
+    <section class="hero-section" id="hero">
+      <div class="hero-backdrop" id="hero-backdrop"></div>
+      <div class="hero-gradient-overlay"></div>
+      <div class="hero-content">
+        <div class="hero-series-badge">
+          <span class="netflix-n">N</span>
+          <span class="badge-text">SERIES</span>
+        </div>
+        <h1 class="hero-title" id="hero-title">2 BROKE GIRLS</h1>
+        
+        <div class="hero-meta">
+          <span class="match-score">98% Match</span>
+          <span class="rating-badge">TV-14</span>
+          <span class="seasons-count">Final Season (Season 6)</span>
+          <span class="quality-badge">1080p FHD</span>
+          <span class="audio-badge">x265 / HEVC</span>
+          <span class="quality-badge sub-active"><i class="fa-solid fa-closed-captioning"></i> Subtitles Active</span>
+        </div>
+
+        <p class="hero-synopsis" id="hero-synopsis">
+          Max Black and Caroline Channing balance waitressing at a Brooklyn diner with their dream of opening a dessert bar, surviving outrageous mishaps, hilarious dates, and eccentric customers.
+        </p>
+
+        <div class="hero-actions">
+          <button class="btn btn-primary" id="hero-resume-btn" onclick="playHeroEpisode()">
+            <i class="fa-solid fa-play"></i> <span id="hero-resume-text">Play S6:E1-E2</span>
+          </button>
+          <button class="btn btn-secondary" id="hero-info-btn" onclick="openHeroDetails()">
+            <i class="fa-solid fa-circle-info"></i> More Info
+          </button>
+          <button class="btn btn-tertiary" id="hero-browser-btn" onclick="playHeroInBrowser()">
+            <i class="fa-solid fa-window-maximize"></i> In-Browser
+          </button>
+        </div>
+
+        <div class="hero-next-preview" id="hero-next-preview">
+          <span class="preview-label">Next Up:</span>
+          <span class="preview-title" id="hero-preview-title">S6:E1-E2 • And the Two Openings</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Content Container for 2 Broke Girls -->
+    <main class="main-container">
+      <!-- Continue Watching Row (Dynamically shown if items exist) -->
+      <section class="content-section" id="continue-section" style="display: none;">
+        <h2 class="section-title">
+          <i class="fa-solid fa-clock-rotate-left"></i> Continue Watching for You
+        </h2>
+        <div class="continue-grid" id="continue-grid">
+          <!-- Rendered via JS -->
+        </div>
+      </section>
+
+      <!-- Season Tabs & Episode Browser -->
+      <section class="content-section" id="episodes-section">
+        <div class="section-header-row">
+          <div class="season-tabs">
+            <button class="season-tab active" id="tab-s6" onclick="selectSeason(6)">Final Season (Season 6) <span class="count-pill" id="count-s6">20</span></button>
+            <button class="season-tab" id="tab-all" onclick="selectSeason('all')">All Episodes <span class="count-pill" id="count-all">20</span></button>
+          </div>
+
+          <div class="view-filters">
+            <span class="filter-label">Filter:</span>
+            <select id="status-filter" class="filter-select" onchange="applyFilters()">
+              <option value="all">All Episodes</option>
+              <option value="in_progress">In Progress</option>
+              <option value="unwatched">Unwatched</option>
+              <option value="watched">Watched</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Episode Grid -->
+        <div class="episodes-grid" id="episodes-grid">
+          <!-- Rendered via JS -->
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- =========================================================================
+       VIEW 2: YOUTUBE SANCTUARY (Luxury, Aesthetic, Uncluttered Experience)
+       ========================================================================= -->
+  <div id="youtube-container" class="main-view-container hidden">
+    <div class="yt-sanctuary-page">
+      <!-- Luxury Hero Header -->
+      <section class="yt-luxury-hero">
+        <div class="yt-luxury-tag">
+          <i class="fa-solid fa-crown" style="color: #D4AF37;"></i>
+          <span>EXCLUSIVE STREAMING</span>
+        </div>
+
+        <h1 class="yt-luxury-title">
+          THE YOUTUBE SANCTUARY
+        </h1>
+
+        <p class="yt-luxury-desc">
+          Your personal portal for recommendations, subscriptions, and cinematic streaming in pure elegance.
+        </p>
+
+        <!-- Luxury Account Access Bar -->
+        <div class="yt-luxury-account-bar">
+          <div class="yt-account-info">
+            <div class="yt-account-avatar">
+              <i class="fa-solid fa-circle-user"></i>
+            </div>
+            <div class="yt-account-text">
+              <span class="yt-account-label">ACCOUNT ACCESS</span>
+              <span class="yt-account-status">Sign in to sync your personal subscriptions, watch history, and algorithm recommendations</span>
+            </div>
+          </div>
+          <div class="yt-account-actions">
+            <button class="btn-luxury-login" onclick="openYouTubePortal('signin')">
+              <i class="fa-solid fa-arrow-right-to-bracket"></i> Sign In to Account
+            </button>
+            <button class="btn-luxury-ghost" onclick="openYouTubePortal('switch')" title="Switch Google Account">
+              <i class="fa-solid fa-users"></i> Switch Account
+            </button>
+            <button class="btn-luxury-ghost" onclick="openYouTubePortal('account')" title="Account Settings">
+              <i class="fa-solid fa-gear"></i> Settings
+            </button>
+          </div>
+        </div>
+
+        <!-- Minimalist Search & URL Bar -->
+        <div class="yt-luxury-search-wrap">
+          <i class="fa-solid fa-magnifying-glass yt-search-icon"></i>
+          <input type="text" id="yt-search-input" placeholder="Search YouTube or paste any video link to watch..." onkeydown="if(event.key==='Enter') quickStreamYouTube('theater')">
+          <div class="yt-search-actions">
+            <button class="btn-luxury-primary" onclick="quickStreamYouTube('theater')" title="Watch inside Sanctuary Theater">
+              <i class="fa-solid fa-play"></i> Watch in Theater
+            </button>
+            <button class="btn-luxury-ghost" onclick="quickStreamYouTube('vlc')" title="Stream via VLC hardware acceleration">
+              <i class="fa-solid fa-arrow-up-right-from-square"></i> VLC
+            </button>
+            <button class="btn-luxury-ghost" onclick="quickStreamYouTube('feed')" title="Open live feed">
+              <i class="fa-solid fa-arrow-right"></i> Open Feed
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Luxury Portal Cards (Minimalist & Functional) -->
+      <div class="yt-portal-grid">
+        <div class="yt-portal-card yt-login-card" onclick="openYouTubePortal('signin')">
+          <div class="yt-portal-icon-box" style="color: #D4AF37; background: rgba(212, 175, 55, 0.1);">
+            <i class="fa-solid fa-arrow-right-to-bracket"></i>
+          </div>
+          <div class="yt-portal-content">
+            <h3 class="yt-portal-title" style="color: #D4AF37;">Account Login</h3>
+            <p class="yt-portal-sub">Sign in with Google to sync your personal feed and subscriptions</p>
+          </div>
+          <i class="fa-solid fa-arrow-right yt-portal-arrow" style="color: #D4AF37;"></i>
+        </div>
+
+        <div class="yt-portal-card" onclick="openYouTubePortal('home')">
+          <div class="yt-portal-icon-box">
+            <i class="fa-solid fa-compass"></i>
+          </div>
+          <div class="yt-portal-content">
+            <h3 class="yt-portal-title">Personal Recommendations</h3>
+            <p class="yt-portal-sub">Your tailored algorithm feed and personalized videos</p>
+          </div>
+          <i class="fa-solid fa-arrow-right yt-portal-arrow"></i>
+        </div>
+
+        <div class="yt-portal-card" onclick="openYouTubePortal('subscriptions')">
+          <div class="yt-portal-icon-box" style="color: #D4AF37;">
+            <i class="fa-solid fa-bell"></i>
+          </div>
+          <div class="yt-portal-content">
+            <h3 class="yt-portal-title">Subscriptions Stream</h3>
+            <p class="yt-portal-sub">Chronological feed of releases from creators you follow</p>
+          </div>
+          <i class="fa-solid fa-arrow-right yt-portal-arrow"></i>
+        </div>
+
+        <div class="yt-portal-card" onclick="openYouTubePortal('history')">
+          <div class="yt-portal-icon-box" style="color: #46D369;">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+          </div>
+          <div class="yt-portal-content">
+            <h3 class="yt-portal-title">Watch History & Queue</h3>
+            <p class="yt-portal-sub">Instantly resume unfinished videos and saved playlists</p>
+          </div>
+          <i class="fa-solid fa-arrow-right yt-portal-arrow"></i>
+        </div>
+
+        <div class="yt-portal-card" onclick="openYouTubePortal('tv')">
+          <div class="yt-portal-icon-box" style="color: #00A8FF;">
+            <i class="fa-solid fa-tv"></i>
+          </div>
+          <div class="yt-portal-content">
+            <h3 class="yt-portal-title">Big Screen TV Mode</h3>
+            <p class="yt-portal-sub">10-foot leanback smart TV experience for couch viewing</p>
+          </div>
+          <i class="fa-solid fa-arrow-right yt-portal-arrow"></i>
+        </div>
+      </div>
+
+      <!-- Curated Sanctuary Featured Section -->
+      <section class="content-section" style="margin-top: 36px;">
+        <div class="section-header-row">
+          <div>
+            <h2 class="section-title">
+              <i class="fa-solid fa-clapperboard" style="color: #E50914;"></i> Curated Highlights & Specials
+            </h2>
+            <span class="yt-luxury-subtitle">Instant-play specials, cast interviews, and backstage bloopers</span>
+          </div>
+
+          <div class="yt-header-actions">
+            <button class="btn btn-sm btn-tertiary" onclick="openAddYouTubeModal()">
+              <i class="fa-solid fa-plus"></i> Add Video
+            </button>
+          </div>
+        </div>
+
+        <!-- Category Filters -->
+        <div class="section-header-row" style="border-bottom: none; padding-bottom: 0; margin-bottom: 16px;">
+          <div class="season-tabs" id="yt-category-tabs">
+            <!-- Dynamically populated via JS -->
+          </div>
+        </div>
+
+        <!-- Video Cards Grid -->
+        <div class="episodes-grid" id="youtube-grid">
+          <!-- Rendered via JS -->
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       MODALS & CONTROLS
+       ========================================================================= -->
+
+  <!-- Episode Details Modal (2 Broke Girls) -->
+  <div class="modal-backdrop" id="details-modal" onclick="closeDetailsModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <button class="modal-close-btn" onclick="closeDetailsModal()">&times;</button>
+      <div class="modal-hero">
+        <img id="modal-hero-img" src="" alt="Episode Still">
+        <div class="modal-hero-gradient"></div>
+        <div class="modal-hero-info">
+          <span class="modal-ep-label" id="modal-ep-label">S6:E1-E2</span>
+          <h2 class="modal-title" id="modal-title">Episode Title</h2>
+          <div class="modal-actions">
+            <button class="btn btn-primary" id="modal-vlc-btn">
+              <i class="fa-solid fa-play"></i> Play with VLC
+            </button>
+            <button class="btn btn-secondary" id="modal-browser-btn">
+              <i class="fa-solid fa-laptop"></i> Play In-Browser
+            </button>
+            <button class="btn btn-ghost" id="modal-mark-btn" onclick="toggleModalWatched()">
+              <i class="fa-solid fa-check"></i> Mark Watched
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-body">
+        <div class="modal-body-main">
+          <div class="modal-meta-row">
+            <span class="meta-tag rating">TV-14</span>
+            <span class="meta-tag runtime" id="modal-runtime">22m</span>
+            <span class="meta-tag airdate" id="modal-airdate">2015-11-12</span>
+            <span class="meta-tag quality">1080p FHD</span>
+            <span class="meta-tag codec">x265 / HEVC</span>
+          </div>
+
+          <h3 class="synopsis-heading">Episode Synopsis</h3>
+          <p class="modal-synopsis" id="modal-synopsis">
+            Synopsis goes here...
+          </p>
+
+          <div class="resume-progress-box" id="modal-progress-box">
+            <div class="progress-info">
+              <span>Resume Position: <strong id="modal-progress-time">12:30</strong> of <strong id="modal-duration-time">21:45</strong></span>
+              <span id="modal-progress-pct">57% watched</span>
+            </div>
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill" id="modal-progress-bar" style="width: 57%;"></div>
+            </div>
+            <div class="progress-actions">
+              <button class="btn-text" onclick="resetModalProgress()">↺ Reset to Beginning</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-body-sidebar">
+          <div class="sidebar-item">
+            <span class="sidebar-label">Cast:</span>
+            <span class="sidebar-value">Kat Dennings, Beth Behrs, Garrett Morris, Jonathan Kite, Matthew Moy, Jennifer Coolidge</span>
+          </div>
+          <div class="sidebar-item">
+            <span class="sidebar-label">Audio & Codec:</span>
+            <span class="sidebar-value">VLC Native Player (x265 10-bit / AAC 5.1)</span>
+          </div>
+          <div class="sidebar-item">
+            <span class="sidebar-label">Subtitles:</span>
+            <span class="sidebar-value" style="color: #00FF88;"><i class="fa-solid fa-check"></i> English Subtitles Active</span>
+          </div>
+          <div class="sidebar-item">
+            <span class="sidebar-label">File Size:</span>
+            <span class="sidebar-value" id="modal-filesize">338 MB</span>
+          </div>
+          <div class="sidebar-item">
+            <span class="sidebar-label">Filename:</span>
+            <span class="sidebar-value filename-text" id="modal-filename">2.Broke.Girls.S06E01E02...mp4</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- In-Browser Video Player Modal -->
+  <div class="modal-backdrop player-backdrop" id="player-modal" onclick="closePlayerModal(event)">
+    <div class="player-wrapper" id="player-wrapper" onclick="event.stopPropagation()">
+      <div class="player-overlay-header" id="player-overlay-header">
+        <div class="player-header-left">
+          <button class="player-back-btn" onclick="closePlayerModal()" title="Back to Sanctuary (Esc)">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>Back</span>
+          </button>
+
+          <div class="player-ep-nav-group">
+            <button class="player-nav-btn" id="player-prev-ep-btn" onclick="playPreviousEpisode()" title="Previous Episode (P)">
+              <i class="fa-solid fa-backward-step"></i>
+              <span>Prev</span>
+            </button>
+            <button class="player-nav-btn" id="player-next-ep-btn" onclick="playNextEpisode()" title="Next Episode (N)">
+              <span>Next</span>
+              <i class="fa-solid fa-forward-step"></i>
+            </button>
+          </div>
+
+          <div class="player-title-info">
+            <span class="player-badge">NOW PLAYING</span>
+            <span id="player-ep-title" class="player-ep-title-text">S6:E1-E2 • And the Two Openings</span>
+          </div>
+        </div>
+        <div class="player-header-right">
+          <button class="player-icon-btn" id="player-fs-btn" onclick="toggleAppFullscreen()" title="Toggle Fullscreen (F11 / F)">
+            <i class="fa-solid fa-expand"></i>
+          </button>
+          <button class="player-icon-btn" onclick="closePlayerModal()" title="Close Player (Esc)">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Edge Navigation Wings -->
+      <button class="player-edge-nav edge-prev" id="player-edge-prev" onclick="playPreviousEpisode()" title="Previous Episode (P)">
+        <i class="fa-solid fa-chevron-left"></i>
+        <span class="edge-tooltip" id="edge-prev-tooltip">Previous Episode</span>
+      </button>
+      <button class="player-edge-nav edge-next" id="player-edge-next" onclick="playNextEpisode()" title="Next Episode (N)">
+        <span class="edge-tooltip" id="edge-next-tooltip">Next Episode</span>
+        <i class="fa-solid fa-chevron-right"></i>
+      </button>
+
+      <!-- Up Next Auto-Play Card -->
+      <div class="player-up-next-card" id="player-up-next-card" style="display: none;">
+        <div class="up-next-badge">UP NEXT</div>
+        <div class="up-next-title" id="up-next-title">S6:E3 • And the 80's Movie</div>
+        <div class="up-next-timer">Starting in <span id="up-next-countdown">5</span>s</div>
+        <div class="up-next-buttons">
+          <button class="btn btn-sm btn-primary" onclick="confirmPlayNext()"><i class="fa-solid fa-play"></i> Play Now</button>
+          <button class="btn btn-sm btn-secondary" onclick="cancelPlayNext()">Cancel</button>
+        </div>
+      </div>
+
+      <div class="player-video-container">
+        <video id="html-video-player" controls preload="metadata"></video>
+      </div>
+    </div>
+  </div>
+
+  <!-- YouTube Cinema Theater Modal -->
+  <div class="modal-backdrop player-backdrop" id="yt-player-modal" onclick="closeYouTubePlayerModal(event)">
+    <div class="player-wrapper" id="yt-player-wrapper" onclick="event.stopPropagation()">
+      <div class="player-overlay-header" id="yt-overlay-header">
+        <div class="player-header-left">
+          <button class="player-back-btn" onclick="closeYouTubePlayerModal()" title="Back to Sanctuary (Esc)">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>Back</span>
+          </button>
+          <div class="player-title-info">
+            <span class="player-badge" style="background: #E50914;"><i class="fa-brands fa-youtube"></i> SANCTUARY THEATER</span>
+            <span id="yt-player-title" class="player-ep-title-text">YouTube Video</span>
+          </div>
+        </div>
+        <div class="player-header-right">
+          <button class="player-icon-btn" id="yt-fs-btn" onclick="toggleAppFullscreen()" title="Toggle Fullscreen (F11 / F)">
+            <i class="fa-solid fa-expand"></i>
+          </button>
+          <button class="player-icon-btn" onclick="closeYouTubePlayerModal()" title="Close Theater (Esc)">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+      <div class="player-video-container yt-iframe-container">
+        <iframe id="yt-iframe" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Video Modal -->
+  <div class="modal-backdrop" id="add-yt-modal" onclick="closeAddYouTubeModal(event)">
+    <div class="modal-content yt-add-modal" onclick="event.stopPropagation()">
+      <button class="modal-close-btn" onclick="closeAddYouTubeModal()">&times;</button>
+      <div class="modal-add-header">
+        <i class="fa-solid fa-film" style="color: #D4AF37; font-size: 30px;"></i>
+        <h2>Add Video to Sanctuary</h2>
+        <p>Save any video link to your curated Sanctuary library.</p>
+      </div>
+      <div class="modal-add-body">
+        <div class="form-group">
+          <label>Video URL or ID <span style="color: #E50914;">*</span></label>
+          <input type="text" id="yt-add-url" class="modal-input" placeholder="e.g. https://www.youtube.com/watch?v=..." oninput="previewYouTubeInput(this.value)">
+        </div>
+
+        <div class="yt-preview-box" id="yt-preview-box" style="display: none;">
+          <img id="yt-preview-thumb" src="" alt="Thumbnail">
+          <div class="yt-preview-details">
+            <span class="yt-preview-channel" id="yt-preview-channel">Channel</span>
+            <h4 class="yt-preview-title" id="yt-preview-title">Video Title</h4>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Category</label>
+          <select id="yt-add-category" class="filter-select" style="width: 100%;">
+            <option value="Favorites">Favorites</option>
+            <option value="Specials">Specials</option>
+            <option value="Interviews">Interviews</option>
+            <option value="Comedy">Comedy</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Title (Optional)</label>
+          <input type="text" id="yt-add-title" class="modal-input" placeholder="Leave blank to use original title">
+        </div>
+
+        <div class="form-group">
+          <label>Notes (Optional)</label>
+          <textarea id="yt-add-desc" class="modal-input" rows="2" placeholder="Add custom notes..."></textarea>
+        </div>
+
+        <div class="modal-add-actions">
+          <button class="btn btn-ghost" onclick="closeAddYouTubeModal()">Cancel</button>
+          <button class="btn btn-primary" id="yt-submit-btn" onclick="submitAddYouTube()">
+            <i class="fa-solid fa-plus"></i> Save Video
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Persistent Floating VLC Remote Bar -->
+  <div class="vlc-remote-bar" id="vlc-remote-bar">
+    <div class="remote-left">
+      <div class="remote-pulse"></div>
+      <img id="remote-thumb" src="/static/assets/poster.jpg" alt="Now Playing">
+      <div class="remote-info">
+        <span class="remote-badge">PLAYING IN VLC</span>
+        <span class="remote-title" id="remote-title">Episode Title</span>
+      </div>
+    </div>
+
+    <div class="remote-center">
+      <div class="remote-controls">
+        <button class="remote-btn" onclick="sendVlcControl('seek', -10)" title="Rewind 10s"><i class="fa-solid fa-rotate-left"></i> 10s</button>
+        <button class="remote-btn play-pause-btn" id="remote-play-pause" onclick="sendVlcControl('toggle')" title="Play / Pause"><i class="fa-solid fa-pause"></i></button>
+        <button class="remote-btn" onclick="sendVlcControl('seek', 10)" title="Forward 10s">10s <i class="fa-solid fa-rotate-right"></i></button>
+        <button class="remote-btn stop-btn" onclick="sendVlcControl('stop')" title="Stop Playback"><i class="fa-solid fa-stop"></i></button>
+      </div>
+      <div class="remote-timeline">
+        <span id="remote-curr-time">00:00</span>
+        <div class="remote-progress-bg">
+          <div class="remote-progress-fill" id="remote-progress-fill" style="width: 0%;"></div>
+        </div>
+        <span id="remote-total-time">00:00</span>
+      </div>
+    </div>
+
+    <div class="remote-right">
+      <button class="remote-btn" onclick="sendVlcControl('fullscreen')" title="Toggle Fullscreen in VLC"><i class="fa-solid fa-expand"></i> Fullscreen</button>
+      <span class="remote-tag">Hardware Accelerated</span>
+      <button class="btn btn-sm btn-ghost" onclick="sendVlcControl('stop')">Close VLC</button>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast"></div>
+
+  <script src="/static/app.js?v=20261026_03"></script>
+</body>
+</html>
